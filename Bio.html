@@ -1,0 +1,202 @@
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital@1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300&display=swap">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css2?family=Bitter&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="stylesss.css">
+
+</head>
+<body>
+
+ <script type="text/javascript"   src="sketch.js"></script>
+ <script type="text/javascript">
+        
+        // ----------------------------------------
+        // Particle
+        // ----------------------------------------
+
+        function Particle( x, y, radius ) {
+            this.init( x, y, radius );
+        }
+
+        Particle.prototype = {
+
+            init: function( x, y, radius ) {
+
+                this.alive = true;
+
+                this.radius = radius || 10;
+                this.wander = 0.15;
+                this.theta = random( TWO_PI );
+                this.drag = 0.92;
+                this.color = '#fff';
+
+                this.x = x || 0.0;
+                this.y = y || 0.0;
+
+                this.vx = 0.0;
+                this.vy = 0.0;
+            },
+
+            move: function() {
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.vx *= this.drag;
+                this.vy *= this.drag;
+
+                this.theta += random( -0.5, 0.5 ) * this.wander;
+                this.vx += sin( this.theta ) * 0.1;
+                this.vy += cos( this.theta ) * 0.1;
+
+                this.radius *= 0.96;
+                this.alive = this.radius > 0.5;
+            },
+
+            draw: function( ctx ) {
+
+                ctx.beginPath();
+                ctx.arc( this.x, this.y, this.radius, 0, TWO_PI );
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        };
+
+        // ----------------------------------------
+        // Example
+        // ----------------------------------------
+
+        var MAX_PARTICLES = 280;
+        var COLOURS = [ '#69D2E7', '#A7DBD8', '#E0E4CC', '#F38630', '#FA6900', '#FF4E50', '#F9D423' ];
+
+        var particles = [];
+        var pool = [];
+
+        var demo = Sketch.create({
+            container: document.getElementById( 'container' ),
+            retina: 'auto'
+        });
+
+        demo.setup = function() {
+
+            // Set off some initial particles.
+            var i, x, y;
+
+            for ( i = 0; i < 20; i++ ) {
+                x = ( demo.width * 0.5 ) + random( -100, 100 );
+                y = ( demo.height * 0.5 ) + random( -100, 100 );
+                demo.spawn( x, y );
+            }
+        };
+
+        demo.spawn = function( x, y ) {
+            
+            var particle, theta, force;
+
+            if ( particles.length >= MAX_PARTICLES )
+                pool.push( particles.shift() );
+
+            particle = pool.length ? pool.pop() : new Particle();
+            particle.init( x, y, random( 50, 50 ) );
+
+            particle.wander = random( 0.5, 2.0 );
+            particle.color = random( COLOURS );
+            particle.drag = random( 0.9, 0.99 );
+
+            theta = random( TWO_PI );
+            force = random( 0, 0 );
+
+            particle.vx = sin( theta ) * force;
+            particle.vy = cos( theta ) * force;
+
+            particles.push( particle );
+        };
+
+        demo.update = function() {
+
+            var i, particle;
+
+            for ( i = particles.length - 1; i >= 0; i-- ) {
+
+                particle = particles[i];
+
+                if ( particle.alive ) particle.move();
+                else pool.push( particles.splice( i, 1 )[0] );
+            }
+        };
+
+        demo.draw = function() {
+
+            demo.globalCompositeOperation  = 'lighter';
+
+            for ( var i = particles.length - 1; i >= 0; i-- ) {
+                particles[i].draw( demo );
+            }
+        };
+
+        demo.mousemove = function() {
+
+            var particle, theta, force, touch, max, i, j, n;
+
+            for ( i = 0, n = demo.touches.length; i < n; i++ ) {
+
+                touch = demo.touches[i], max = random( 1, 4 );
+                for ( j = 0; j < max; j++ ) {
+                  demo.spawn( touch.x, touch.y );
+                }
+
+            }
+        };
+        
+        </script>
+  
+    <section>
+        <div class="bio">
+            
+            <h3> Hi, Iam currently an enginnering student in  <u>   Birla Institute of Technology and Sciences Pilani- KK Birla campus (Goa) </u>. My hobbies include watching movies and i love to edit photos, and intersted in designing websites. Iam always keen to learn something new.</h3>
+        </div>
+
+   <div move="move">       
+       <h1> Education </h1>
+       <div class="up">
+                <h2> "Schooling" </h2>
+              <div class="schooling">
+    
+                      <p> <span>.Board  : </span>   CBSE.</p>
+                      <P><span>.Institute :</span> Green Wood School , Hanamakonda , Telangana. </P>
+                     <p><span>.Year of Passing :</span> 2017 </p>
+                     <p><span>.Grade :</span> 9.7 </p>
+            </div>
+
+                   <h4>"Inter"</h4>
+                  <div class="inter">
+                    <p><span>.Board :</span> Ts Board </p>
+                    <p><span>.Institute :</span> Pine Grove College, Hyd.</p>
+                    <p><span>.Year of Passing :</span> 2019</p>
+                     <p><span>.Grade </span>: 94%</p>
+            </div>
+
+                   <h5>"B.E (Pursuing)"</h5>
+                    <div class="be">
+                     <p><span>.Degree :</span> Electronics and Instrumentation</p>
+                     <p><span>.Institute :</span>  Birla Institute of Technology and Sciences Pilani- KK Birla campus (Goa) </p>
+                    </div>
+                     </section>
+
+
+    </div>               
+    
+</body>
+</html>
